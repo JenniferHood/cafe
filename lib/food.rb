@@ -15,4 +15,15 @@ class Food
   define_method(:==) do |another_food|
     self.type().==(another_food.type()).&(self.id().==(another_food.id()))
   end
+
+  define_singleton_method(:all) do
+    returned_food = DB.exec("SELECT * FROM food;")
+    food = []
+    returned_food.each() do |food|
+      type = food.fetch("type")
+      id = food.fetch("id").to_i()
+      food.push(Food.new({:type => type, :id => id}))
+    end
+    food
+  end
 end
