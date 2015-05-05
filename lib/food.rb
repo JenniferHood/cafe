@@ -26,4 +26,11 @@ class Food
     end
     food
   end
+
+  define_singleton_method(:find) do |target_id|
+    @id = target_id
+    entered_food = DB.exec("SELECT * FROM food WHERE id = #{target_id};")
+    @type = entered_food.first().fetch('type')
+    Food.new({:type => @type, :id => @id})
+  end
 end

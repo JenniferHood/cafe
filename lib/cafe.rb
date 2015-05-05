@@ -23,6 +23,12 @@ class Cafe
       id = cafe.fetch("id").to_i()
       cafe.push(Cafe.new({:name => type, :id => id}))
     end
-    cafe
+  end
+
+  define_singleton_method(:find) do |target_id|
+    @id = target_id
+    entered_cafe = DB.exec("SELECT * FROM cafe WHERE id = #{target_id};")
+    @name = entered_cafe.first().fetch('name')
+    Cafe.new({:name => @name, :id => @id})
   end
 end
