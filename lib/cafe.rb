@@ -31,4 +31,17 @@ class Cafe
     @name = entered_cafe.first().fetch('name')
     Cafe.new({:name => @name, :id => @id})
   end
+
+
+  define_method(:food_type) do
+    food_type = []
+    results = DB.exec("SELECT food_type_id FROM cafe_food_type WHERE cafe_id = #{id()};")
+    results.each() do |result|
+      food_type_id = result.fetch("food_type_id").to_i()
+      food_type = DB.exec("SELECT * FROM food_type WHERE id = #{food_type_id};")
+      type = food_type.first().fetch("food_type")
+      food_type.push(Food.new({:type => type, :id => food_type_id}))
+    end
+    food_type
+  end
 end
